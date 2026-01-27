@@ -1,10 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const mongoose = require("mongoose");
 
-const pasteRoutes = require("./routes/paste.routes");
-const healthRoutes = require("./routes/health.routes");
+const connectDB = require("./config/db");
+const pasteRoutes = require("./routes/pasteRoute");
+const healthRoutes = require("./routes/healthRoute");
 
 const app = express();
 
@@ -19,30 +19,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Internal Server Error" });
 });
 
-/* ---------------- MongoDB connection caching ---------------- */
+const PORT = process.env.PORT || 5000;
 
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-async function connectDB() {
-  if (cached.conn) return cached.conn;
-
-  if (!cached.promise) {
-    cached.promise = mongoose
-      .connect(process.env.MONGODB_URI)
-      .then((mongoose) => mongoose);
-  }
-
-  cached.conn = await cached.promise;
-  return cached.conn;
-}
-
-/* ---------------- Vercel handler ---------------- */
-
-module.exports = async (req, res) => {
-  await connectDB();
-  return app(req, res);
-};
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});

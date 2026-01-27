@@ -4,7 +4,7 @@ const {
   createPaste,
   getPasteApi,
   getPasteHtml
-} = require("../controllers/paste.controller");
+} = require("../controllers/pasteController");
 
 router.post("/api/pastes", createPaste);
 router.get("/api/pastes/:id", getPasteApi);
