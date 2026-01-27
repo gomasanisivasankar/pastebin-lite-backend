@@ -1,0 +1,55 @@
+node_modules
+dist
+dist-ssr
+*.local 
+# Editor directories and files
+.vscode/*   
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo       
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.code-workspace        
+*.history
+
+# Dependency directories
+node_modules/
+.pnp.js
+.pnp.cjs    
+# Testing
+coverage/
+.nyc_output/
+jest-coverage/
+.vitest/
+# Build outputs
+build/
+out/
+# Environment files
+.env
+.env.local
+.env.*.local
+# Miscellaneous
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
+.vagrant/
+.cache/
+*.pid
+*.seed
+*.pid.lock
+# OS generated files
+ehthumbs.db
+Icon?
+
