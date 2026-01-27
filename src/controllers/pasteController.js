@@ -1,16 +1,17 @@
 const Paste = require("../models/Paste");
 const getNow = require("../utils/getNow");
-const { nanoid } = require("nanoid");
 
 /* ---------------- CREATE PASTE ---------------- */
 const createPaste = async (req, res) => {
   try {
     const { content, ttl_seconds, max_views } = req.body;
 
+    // Validate content
     if (!content || typeof content !== "string" || !content.trim()) {
       return res.status(400).json({ error: "Invalid content" });
     }
 
+    // Validate TTL
     if (
       ttl_seconds !== undefined &&
       (!Number.isInteger(ttl_seconds) || ttl_seconds < 1)
@@ -18,6 +19,7 @@ const createPaste = async (req, res) => {
       return res.status(400).json({ error: "Invalid ttl_seconds" });
     }
 
+    // Validate max views
     if (
       max_views !== undefined &&
       (!Number.isInteger(max_views) || max_views < 1)
@@ -25,23 +27,22 @@ const createPaste = async (req, res) => {
       return res.status(400).json({ error: "Invalid max_views" });
     }
 
+    // Calculate expiry
     let expiresAt = null;
     if (ttl_seconds) {
       expiresAt = new Date(Date.now() + ttl_seconds * 1000);
     }
 
-    const id = nanoid(10);
-
-    await Paste.create({
-      _id: id,
+    // MongoDB auto-generates _id
+    const paste = await Paste.create({
       content,
       expiresAt,
       maxViews: max_views ?? null
     });
 
     res.status(201).json({
-      id,
-      url: `${process.env.BASE_URL}/p/${id}`
+      id: paste._id.toString(),
+      url: `${process.env.BASE_URL}/p/${paste._id}`
     });
   } catch (error) {
     console.error("Create paste error:", error);
@@ -100,6 +101,7 @@ const getPasteHtml = async (req, res) => {
       return res.status(404).send("Not Found");
     }
 
+    // Escape HTML (XSS safe)
     const safe = paste.content
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")

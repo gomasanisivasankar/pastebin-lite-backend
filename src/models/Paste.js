@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PasteSchema = new mongoose.Schema({
-  _id: String,
+  
   content: {
     type: String,
     required: true
