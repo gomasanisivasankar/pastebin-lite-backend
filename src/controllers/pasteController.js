@@ -1,6 +1,9 @@
 const Paste = require("../models/Paste");
 const getNow = require("../utils/getNow");
 
+
+
+
 /* ---------------- CREATE PASTE ---------------- */
 const createPaste = async (req, res) => {
   try {
